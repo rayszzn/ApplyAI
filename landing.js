@@ -76,7 +76,7 @@ function animateCount(id, target) {
 
 // ── Upgrade ──
 function initUpgradeButtons() {
-  const STRIPE_LINK = 'https://buy.stripe.com/YOUR_STRIPE_LINK';
+  const STRIPE_LINK = 'https://buy.stripe.com/cNidR2ebb80Pfwl01r1sQ00';
   document.getElementById('navUpgrade')?.addEventListener('click', () => window.open(STRIPE_LINK, '_blank'));
   document.getElementById('pricingUpgrade')?.addEventListener('click', () => window.open(STRIPE_LINK, '_blank'));
 }
