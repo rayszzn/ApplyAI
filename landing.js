@@ -26,6 +26,7 @@ function applyTheme(theme) {
 
 // ── Stats ──
 async function loadStats() {
+  if (typeof chrome === 'undefined' || !chrome.storage) return;
   const data = await chrome.storage.local.get([
     'usageCount', 'isPro', 'apiKey', 'cvText', 'cvFileName', 'genericQA'
   ]);
