@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ApplyAI — Your Job Application Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="landing.css">
+</head>
+<body>
+
+  <div class="noise"></div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+
+    <nav class="nav">
+      <div class="nav-logo">
+        <div class="nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="#f0c060"/>
+          </svg>
+        </div>
+        <span class="nav-wordmark">Apply<em>AI</em></span>
+      </div>
+      <div class="nav-actions">
+        <span class="nav-plan" id="navPlan">Free Plan</span>
+        <!-- Theme toggle -->
+        <button class="theme-toggle" id="themeToggle" title="Toggle light/dark mode" aria-label="Toggle theme">
+          <span class="theme-icon theme-icon-light">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </span>
+          <span class="theme-icon theme-icon-dark">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </button>
+        <button class="btn-nav-upgrade" id="navUpgrade">Upgrade to Pro</button>
+      </div>
+    </nav>
+
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="eyebrow-dot"></span>
+        AI-Powered Job Applications
+      </div>
+
+      <h1 class="hero-title">
+        Your AI Co<span class="hero-hyphen">-</span>Pilot for<br>
+        <em>every Job Application.</em>
+      </h1>
+
+      <p class="hero-tagline">Never struggle with Job Application Questions Again</p>
+
+      <p class="hero-sub">
+        ApplyAI reads the job description, researches the company, studies your CV, experiences and Q&amp;A bank, and writes perfectly tailored answers to every application question&nbsp;— in seconds.
+      </p>
+
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-num" id="statUsage">0</span>
+          <span class="stat-label">Answers generated</span>
+        </div>
+        <div class="stat-div"></div>
+        <div class="stat">
+          <span class="stat-num" id="statQA">0</span>
+          <span class="stat-label">Q&amp;A pairs stored</span>
+        </div>
+        <div class="stat-div"></div>
+        <div class="stat">
+          <span class="stat-num">10+</span>
+          <span class="stat-label">ATS platforms supported</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-scroll-hint">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+  </section>
+
+  <!-- Dashboard -->
+  <main class="dashboard">
+
+    <section class="setup-section">
+      <h2 class="section-heading">Setup Checklist</h2>
+      <div class="setup-grid">
+        <div class="setup-card" id="setupApiKey">
+          <div class="setup-icon setup-icon-pending" id="apiKeyIcon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="setup-text">
+            <h3>API Key</h3>
+            <p id="apiKeyStatus">Not configured</p>
+          </div>
+          <div class="setup-check" id="apiKeyCheck"></div>
+        </div>
+        <div class="setup-card" id="setupCV">
+          <div class="setup-icon setup-icon-pending" id="cvIcon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="2"/><polyline points="14 2 14 8 20 8" stroke="currentColor" stroke-width="2"/><line x1="16" y1="13" x2="8" y2="13" stroke="currentColor" stroke-width="2"/><line x1="16" y1="17" x2="8" y2="17" stroke="currentColor" stroke-width="2"/></svg>
+          </div>
+          <div class="setup-text">
+            <h3>CV / Résumé</h3>
+            <p id="cvStatus">Not uploaded</p>
+          </div>
+          <div class="setup-check" id="cvCheck"></div>
+        </div>
+        <div class="setup-card" id="setupQA">
+          <div class="setup-icon setup-icon-pending" id="qaIcon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2"/></svg>
+          </div>
+          <div class="setup-text">
+            <h3>Q&amp;A Bank</h3>
+            <p id="qaStatus">0 pairs stored</p>
+          </div>
+          <div class="setup-check" id="qaCheck"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="how-section">
+      <h2 class="section-heading">How it works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-body">
+            <h3>Set up your profile</h3>
+            <p>Upload your CV and save example answers to common questions. This is your personal knowledge base.</p>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-body">
+            <h3>Visit any job application</h3>
+            <p>Works on Workday, Greenhouse, Lever, LinkedIn, Indeed, Taleo, iCIMS, SmartRecruiters and more.</p>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-body">
+            <h3>Click a question box</h3>
+            <p>A glowing "Respond with ApplyAI" button appears above any recognised question field.</p>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <div class="step-body">
+            <h3>Get a tailored answer</h3>
+            <p>AI reads the job description, researches the company, and crafts a specific, human, compelling answer in seconds — respecting any word limits.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="platforms-section">
+      <h2 class="section-heading">Supported platforms</h2>
+      <div class="platforms-grid">
+        <div class="platform-tag">Workday</div>
+        <div class="platform-tag">Greenhouse</div>
+        <div class="platform-tag">Lever</div>
+        <div class="platform-tag">LinkedIn</div>
+        <div class="platform-tag">Indeed</div>
+        <div class="platform-tag">Taleo</div>
+        <div class="platform-tag">iCIMS</div>
+        <div class="platform-tag">SmartRecruiters</div>
+        <div class="platform-tag">Ashby</div>
+        <div class="platform-tag">Any career page</div>
+      </div>
+    </section>
+
+    <section class="pricing-section" id="pricing">
+      <h2 class="section-heading">Simple pricing</h2>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="pricing-tier">Free</div>
+          <div class="pricing-price">£0 <span>/month</span></div>
+          <ul class="pricing-features">
+            <li><span class="feat-yes">✓</span> 15 AI-generated answers</li>
+            <li><span class="feat-yes">✓</span> CV upload (PDF &amp; DOCX)</li>
+            <li><span class="feat-yes">✓</span> Q&amp;A bank</li>
+            <li><span class="feat-yes">✓</span> All ATS platforms</li>
+            <li><span class="feat-no">✗</span> Unlimited answers</li>
+            <li><span class="feat-no">✗</span> Priority speed</li>
+          </ul>
+          <div class="pricing-cta-inactive">Current plan</div>
+        </div>
+        <div class="pricing-card pricing-card-pro">
+          <div class="pricing-popular">Most Popular</div>
+          <div class="pricing-tier">Pro</div>
+          <div class="pricing-price">£4.99 <span>/month</span></div>
+          <ul class="pricing-features">
+            <li><span class="feat-yes">✓</span> Unlimited AI answers</li>
+            <li><span class="feat-yes">✓</span> CV upload (PDF &amp; DOCX)</li>
+            <li><span class="feat-yes">✓</span> Q&amp;A bank</li>
+            <li><span class="feat-yes">✓</span> All ATS platforms</li>
+            <li><span class="feat-yes">✓</span> Priority speed</li>
+            <li><span class="feat-yes">✓</span> Premium answer templates</li>
+          </ul>
+          <button class="btn-pricing-upgrade" id="pricingUpgrade">
+            Get Pro — £4.99/mo
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-logo">Apply<em>AI</em></div>
+      <p class="footer-text">Your data stays on your device. We never store your CV or API key on our servers.</p>
+    </footer>
+  </main>
+
+  <script src="landing.js"></script>
+</body>
+</html>
