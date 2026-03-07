@@ -1,60 +1,83 @@
-// ApplyAI Landing Page JS — v1.2
+// ApplyAI Landing Page v1.3
+
+const CHROME_STORE_URL    = 'https://chrome.google.com/webstore/detail/YOUR_EXTENSION_ID';
+const STRIPE_LINK         = 'https://buy.stripe.com/cNidR2ebb80Pfwl01r1sQ00';
 
 document.addEventListener('DOMContentLoaded', async () => {
   initTheme();
+  initButtons();
   await loadStats();
-  initUpgradeButtons();
 });
 
 // ── Theme ──
 function initTheme() {
-  // Default is light — only switch if user previously chose dark
-  const saved = localStorage.getItem('applyai-theme') || 'dark';
-  applyTheme(saved);
+  const saved = localStorage.getItem('applyai-theme') || 'light';
+  document.documentElement.setAttribute('data-theme', saved);
 
-  document.getElementById('themeToggle').addEventListener('click', () => {
+  document.getElementById('themeToggle')?.addEventListener('click', () => {
     const current = document.documentElement.getAttribute('data-theme') || 'light';
     const next = current === 'light' ? 'dark' : 'light';
-    applyTheme(next);
+    document.documentElement.setAttribute('data-theme', next);
     localStorage.setItem('applyai-theme', next);
   });
 }
 
-function applyTheme(theme) {
-  document.documentElement.setAttribute('data-theme', theme);
+// ── CTA Buttons ──
+function initButtons() {
+  document.getElementById('tryNowBtn')?.addEventListener('click', () => {
+    window.open(CHROME_STORE_URL, '_blank');
+  });
+
+  document.getElementById('downloadBtn')?.addEventListener('click', () => {
+    window.open(CHROME_STORE_URL, '_blank');
+  });
+
+  document.getElementById('navUpgrade')?.addEventListener('click', (e) => {
+    window.open(STRIPE_LINK, '_blank');
+  });
+
+  document.getElementById('pricingUpgrade')?.addEventListener('click', () => {
+    window.open(STRIPE_LINK, '_blank');
+  });
 }
 
-// ── Stats ──
+// ── Stats (only available when opened from inside the extension) ──
 async function loadStats() {
   if (typeof chrome === 'undefined' || !chrome.storage) return;
+
   const data = await chrome.storage.local.get([
-    'usageCount', 'isPro', 'apiKey', 'cvText', 'cvFileName', 'genericQA'
+    'usageCount', 'isPro', 'cvProfiles', 'genericQA'
   ]);
 
-  const usageCount = data.usageCount || 0;
-  const isPro = data.isPro || false;
-  const hasApiKey = !!(data.apiKey?.trim());
-  const hasCV = !!(data.cvText?.trim());
-  const qaCount = (data.genericQA || []).length;
+  const usageCount  = data.usageCount || 0;
+  const isPro       = data.isPro || false;
+  const cvProfiles  = data.cvProfiles || [];
+  const qaCount     = (data.genericQA || []).length;
+  const hasCV       = cvProfiles.length > 0;
 
   animateCount('statUsage', usageCount);
   animateCount('statQA', qaCount);
 
   document.getElementById('navPlan').textContent = isPro ? 'Pro Plan ✓' : 'Free Plan';
 
-  updateSetupCard('apiKeyIcon', 'apiKeyCheck', 'apiKeyStatus', hasApiKey,
-    hasApiKey ? 'Configured ✓' : 'Not configured — add in extension settings');
+  // Show setup section only when opened from extension
+  const setupSection = document.getElementById('setupSection');
+  if (setupSection) setupSection.style.display = 'block';
+
   updateSetupCard('cvIcon', 'cvCheck', 'cvStatus', hasCV,
-    hasCV ? `Uploaded (${(data.cvText?.length || 0).toLocaleString()} chars) ✓` : 'Not uploaded — add in extension popup');
+    hasCV
+      ? `${cvProfiles.length} CV${cvProfiles.length > 1 ? 's' : ''} uploaded ✓`
+      : 'No CV uploaded — add in extension popup');
+
   updateSetupCard('qaIcon', 'qaCheck', 'qaStatus', qaCount > 0,
-    qaCount > 0 ? `${qaCount} pair${qaCount !== 1 ? 's' : ''} stored ✓` : '0 pairs — add in Q&A Bank tab');
+    qaCount > 0 ? `${qaCount} pair${qaCount !== 1 ? 's' : ''} stored ✓` : '0 pairs — add in Q&A Bank');
 }
 
 function updateSetupCard(iconId, checkId, statusId, isDone, statusText) {
-  const icon = document.getElementById(iconId);
-  const check = document.getElementById(checkId);
+  const icon   = document.getElementById(iconId);
+  const check  = document.getElementById(checkId);
   const status = document.getElementById(statusId);
-  const card = icon?.closest('.setup-card');
+  const card   = icon?.closest('.setup-card');
   if (isDone) {
     icon?.classList.replace('setup-icon-pending', 'setup-icon-done');
     if (check) check.textContent = '✓';
@@ -67,17 +90,10 @@ function animateCount(id, target) {
   const el = document.getElementById(id);
   if (!el || target === 0) return;
   let current = 0;
-  const step = Math.max(1, Math.ceil(target / 30));
+  const step  = Math.max(1, Math.ceil(target / 30));
   const timer = setInterval(() => {
     current = Math.min(current + step, target);
     el.textContent = current;
     if (current >= target) clearInterval(timer);
   }, 40);
-}
-
-// ── Upgrade ──
-function initUpgradeButtons() {
-  const STRIPE_LINK = 'https://buy.stripe.com/cNidR2ebb80Pfwl01r1sQ00';
-  document.getElementById('navUpgrade')?.addEventListener('click', () => window.open(STRIPE_LINK, '_blank'));
-  document.getElementById('pricingUpgrade')?.addEventListener('click', () => window.open(STRIPE_LINK, '_blank'));
 }
