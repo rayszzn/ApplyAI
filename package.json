@@ -1,0 +1,23 @@
+{
+  "name": "applyai",
+  "version": "1.0.0",
+  "description": "ApplyAI - Your AI Job Application Assistant",
+  "main": "landing.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rayszzn/ApplyAI"
+  },
+  "keywords": [
+    "ai",
+    "job-application",
+    "chrome-extension"
+  ],
+  "author": "rayszzn",
+  "license": "ISC",
+  "dependencies": {
+    "@vercel/speed-insights": "^2.0.0"
+  }
+}
