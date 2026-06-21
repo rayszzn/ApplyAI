@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ApplyAI Demo</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:-apple-system,sans-serif;background:#0A1F12;padding:20px}
+    .wrap{background:#0A1F12;border-radius:16px;overflow:hidden}
+    .top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+    .brand{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:#fff}
+    .brand-star{background:#1B3D22;border:1.5px solid #D4A520;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center}
+    .brand em{color:#D4A520;font-style:italic}
+    .badge{background:#1DB954;color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:0.5px}
+    .browser{background:#fff;border-radius:12px;overflow:hidden}
+    .brow{background:#f0f0f0;padding:10px 16px;display:flex;align-items:center;gap:10px}
+    .bdots{display:flex;gap:5px}
+    .bdot{width:11px;height:11px;border-radius:50%}
+    .burl{flex:1;background:#fff;border-radius:20px;padding:4px 14px;font-size:11px;color:#666;text-align:center}
+    .bcontent{padding:24px 28px}
+    .jhead{margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #f0f0f0}
+    .jtitle{font-size:17px;font-weight:700;color:#111;margin-bottom:4px}
+    .jmeta{font-size:12px;color:#888}
+    .spoti{display:inline-flex;align-items:center;gap:5px;background:#f0faf5;color:#1DB954;font-size:11px;font-weight:700;padding:3px 10px;border-radius:12px;margin-bottom:8px;border:1px solid #c8f0da}
+    .qlabel{font-size:13px;font-weight:600;color:#111;margin-bottom:8px}
+    .req{color:#e53935}
+    .ta-wrap{position:relative;margin-bottom:10px}
+    .myta{width:100%;border:2px solid #e0e0e0;border-radius:10px;padding:12px;font-size:13px;font-family:-apple-system,sans-serif;resize:none;color:#333;line-height:1.65;transition:border-color 0.4s,background 0.4s;min-height:130px}
+    .myta.focused{border-color:#D4A520;background:#fffdf5}
+    .myta.crafting{border-color:#D4A520;background:#1A2520;color:#D4A520}
+    .myta.done{border-color:#1DB954;background:#f0faf5;color:#1a1a1a}
+    .overlay{display:none;position:absolute;inset:0;border-radius:10px;background:#1A2520;align-items:center;justify-content:center;flex-direction:column;gap:12px;border:2px solid #D4A520}
+    .overlay.show{display:flex}
+    .spin-ring{width:36px;height:36px;border:3px solid rgba(212,165,32,0.2);border-top-color:#D4A520;border-radius:50%;animation:spin 0.75s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .craft-text{color:#D4A520;font-size:14px;font-style:italic;font-weight:500}
+    .aibtn{display:inline-flex;align-items:center;gap:8px;background:#0F1A12;border:2px solid #D4A520;border-radius:24px;padding:8px 18px;font-size:13px;font-weight:700;color:#D4A520;cursor:pointer;transition:all 0.2s;opacity:0;transform:translateY(6px);pointer-events:none}
+    .aibtn.visible{opacity:1;transform:translateY(0);pointer-events:all;animation:pulse-border 2s ease-in-out infinite}
+    @keyframes pulse-border{0%,100%{box-shadow:0 0 0 0 rgba(212,165,32,0.4)}50%{box-shadow:0 0 0 8px rgba(212,165,32,0)}}
+    .aibtn:hover{background:#1a2e1a;transform:translateY(-1px)}
+    .btnrow{display:flex;align-items:center;gap:12px;min-height:40px}
+    .hint{font-size:12px;color:#aaa;font-style:italic;transition:all 0.3s}
+    .hint.green{color:#1DB954;font-style:normal;font-weight:500}
+    .steps{display:flex;align-items:center;gap:6px;margin-bottom:16px;background:#0D2818;border-radius:10px;padding:12px 16px}
+    .sdot{width:26px;height:26px;border-radius:50%;border:2px solid #1B3D22;color:#2D5A38;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all 0.4s;flex-shrink:0}
+    .sdot.active{border-color:#D4A520;color:#D4A520;background:#1B3D22}
+    .sdot.done{border-color:#1DB954;background:#1DB954;color:#fff}
+    .sline{flex:1;height:2px;background:#1B3D22;border-radius:2px;transition:background 0.4s}
+    .sline.done{background:#1DB954}
+    .slabel{font-size:11px;font-weight:600;color:#2D5A38;transition:color 0.3s}
+    .slabel.active{color:#D4A520}
+    .slabel.done{color:#1DB954}
+    .cta-area{display:flex;flex-direction:column;align-items:center;gap:12px;margin-top:16px;padding:16px;background:#0D2818;border-radius:12px}
+    .cta-tag{font-size:11px;font-weight:700;letter-spacing:2px;color:#2D5A38}
+    .start-btn{background:#1DB954;color:#fff;border:none;border-radius:10px;padding:12px 32px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:0.3px}
+    .start-btn:hover{background:#17a349}
+    .replay-btn{display:none;background:#0F1A12;color:#D4A520;border:2px solid #D4A520;border-radius:10px;padding:10px 28px;font-size:13px;font-weight:700;cursor:pointer;width:100%}
+    .replay-btn.show{display:block}
+    .confetti-wrap{position:relative;overflow:hidden;border-radius:10px}
+    .confetti-dot{position:absolute;width:8px;height:8px;border-radius:50%;opacity:0;animation:conffall 1s ease-out forwards}
+    @keyframes conffall{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(60px)}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top-bar">
+      <div class="brand">
+        <div class="brand-star">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#D4A520"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+        </div>
+        Apply<em>AI</em>
+      </div>
+      <div class="badge">LIVE DEMO</div>
+    </div>
+    <div class="steps">
+      <div class="sdot" id="s1">1</div>
+      <div class="slabel" id="sl1">Open application</div>
+      <div class="sline" id="ln1"></div>
+      <div class="sdot" id="s2">2</div>
+      <div class="slabel" id="sl2">Click ApplyAI</div>
+      <div class="sline" id="ln2"></div>
+      <div class="sdot" id="s3">3</div>
+      <div class="slabel" id="sl3">Answer ready</div>
+    </div>
+    <div class="browser">
+      <div class="brow">
+        <div class="bdots">
+          <div class="bdot" style="background:#FC5F57"></div>
+          <div class="bdot" style="background:#FDBC2C"></div>
+          <div class="bdot" style="background:#29C940"></div>
+        </div>
+        <div class="burl">spotify.com/careers/apply</div>
+      </div>
+      <div class="bcontent">
+        <div class="jhead">
+          <div class="spoti">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="#1DB954"><circle cx="12" cy="12" r="10"/></svg>
+            SPOTIFY
+          </div>
+          <div class="jtitle">Product Manager, Discovery — London</div>
+          <div class="jmeta">Full-time · Product · Posted 2 days ago</div>
+        </div>
+        <div class="qlabel">Why do you want to work at Spotify as a Product Manager? <span class="req">*</span></div>
+        <div class="ta-wrap confetti-wrap" id="taWrap">
+          <textarea class="myta" id="ta" rows="6" placeholder="Click Start Demo below to see ApplyAI in action..." readonly></textarea>
+          <div class="overlay" id="overlay">
+            <div class="spin-ring"></div>
+            <div class="craft-text">Crafting your answer…</div>
+          </div>
+        </div>
+        <div class="btnrow">
+          <div class="aibtn" id="aibtn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="#D4A520"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+            Respond with ApplyAI
+          </div>
+          <span class="hint" id="hint">Click the button to generate your answer</span>
+        </div>
+      </div>
+    </div>
+    <div class="cta-area">
+      <div class="cta-tag" id="ctaTag">SEE HOW IT WORKS</div>
+      <button class="start-btn" id="startBtn">Start demo</button>
+      <button class="replay-btn" id="replayBtn">Replay demo</button>
+    </div>
+  </div>
+  <script>
+    const ta=document.getElementById('ta'),btn=document.getElementById('aibtn'),overlay=document.getElementById('overlay'),hint=document.getElementById('hint'),startBtn=document.getElementById('startBtn'),replayBtn=document.getElementById('replayBtn'),ctaTag=document.getElementById('ctaTag'),taWrap=document.getElementById('taWrap');
+    const dots=[document.getElementById('s1'),document.getElementById('s2'),document.getElementById('s3')];
+    const labels=[document.getElementById('sl1'),document.getElementById('sl2'),document.getElementById('sl3')];
+    const lines=[document.getElementById('ln1'),document.getElementById('ln2')];
+    const answer="Music has always been about more than sound — it's about the moment a song finds you at exactly the right time. That's what Spotify does better than anyone, and it's why the discovery problem here feels genuinely worth solving.\n\nI'm drawn to this PM role because of the scale of the impact. Building features that connect hundreds of millions of people to music they wouldn't have found otherwise — that's not a typical product challenge. It requires deep thinking about taste, context, trust, and personalisation working together.\n\nI bring strong product instincts around data-driven iteration, cross-functional collaboration, and user-centred design. I'm particularly interested in how recommendation systems can feel more human — less like an algorithm and more like a friend who knows your taste. That's the kind of product thinking I'd bring to Spotify every day.";
+    let phase=0,timer=null;
+    function setStep(n){dots.forEach((d,i)=>{if(i<n){d.className='sdot done';d.innerHTML='&#10003;';}else if(i===n){d.className='sdot active';d.innerHTML=i+1;}else{d.className='sdot';d.innerHTML=i+1;}labels[i].className='slabel'+(i<n?' done':i===n?' active':'');});lines.forEach((l,i)=>l.className='sline'+(i<n?' done':''));}
+    function spawnConfetti(){const colors=['#1DB954','#D4A520','#fff','#a8f0c6','#fce4a0'];for(let i=0;i<18;i++){const c=document.createElement('div');c.className='confetti-dot';c.style.cssText=`left:${10+Math.random()*80}%;top:${Math.random()*40}%;background:${colors[i%colors.length]};animation-delay:${Math.random()*0.4}s;animation-duration:${0.8+Math.random()*0.5}s`;taWrap.appendChild(c);setTimeout(()=>c.remove(),1400);}}
+    function reset(){if(timer)clearInterval(timer);phase=0;ta.value='';ta.className='myta';ta.placeholder='Click Start Demo below to see ApplyAI in action...';btn.className='aibtn';overlay.className='overlay';hint.className='hint';hint.textContent='Click the button to generate your answer';replayBtn.className='replay-btn';startBtn.style.display='block';ctaTag.textContent='SEE HOW IT WORKS';setStep(-1);}
+    function startDemo(){reset();startBtn.style.display='none';ctaTag.textContent='WATCH THE MAGIC HAPPEN';phase=1;ta.className='myta focused';setStep(0);hint.textContent='Field selected — ApplyAI button is ready';setTimeout(()=>{btn.className='aibtn visible';},600);}
+    btn.addEventListener('click',()=>{if(phase!==1)return;phase=2;btn.className='aibtn';hint.textContent='';ta.className='myta crafting';overlay.className='overlay show';setStep(1);setTimeout(()=>{overlay.className='overlay';ta.className='myta done';phase=3;setStep(2);let i=0;timer=setInterval(()=>{ta.value=answer.slice(0,i);i+=5;ta.scrollTop=ta.scrollHeight;if(i>answer.length){clearInterval(timer);ta.value=answer;hint.className='hint green';hint.textContent='Answer generated in 2.4s — edit or submit as-is';ctaTag.textContent='TRY IT ON ANY JOB APPLICATION';replayBtn.className='replay-btn show';spawnConfetti();}},16);},2600);});
+    startBtn.addEventListener('click',startDemo);
+    replayBtn.addEventListener('click',()=>{reset();setTimeout(startDemo,100);});
+  </script>
+</body>
+</html>
